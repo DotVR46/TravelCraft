@@ -1,13 +1,18 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
-from app.api.v1.places import router as places_router
-from app.db.session import init_db
-
-app = FastAPI()
-
-
-@app.on_event("startup")
-async def on_startup():
-    await init_db()
+from app.api_v1.places.views import router as places_router
+from app.core.base import Base
+from app.db.db_helper import db_helper
 
 
-app.include_router(places_router, prefix="/api/v1")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with db_helper.engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+app.include_router(places_router, prefix="/api_v1/v1")

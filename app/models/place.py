@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
-from app.db.session import Base
+from app.core.base import Base
 
 
 class Place(Base):
