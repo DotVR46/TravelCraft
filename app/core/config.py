@@ -9,7 +9,6 @@ PASS = os.getenv("DB_PASS")
 HOST = os.getenv("DB_HOST")
 NAME = os.getenv("DB_NAME")
 
-
 BASE_DIR = Path(__file__).parent.parent
 
 
