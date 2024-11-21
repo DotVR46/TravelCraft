@@ -10,15 +10,19 @@ from app.db.db_helper import db_helper
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from app.models.place import Place, Tag  # Импортируем все модели перед созданием таблиц
+    from app.models.place import (
+        Place,
+        Tag,
+    )  # Импортируем все модели перед созданием таблиц
 
     async with db_helper.engine.begin() as conn:
-         # Удаляем все таблицы
+        # Удаляем все таблицы
         await conn.run_sync(Base.metadata.drop_all)
-    # Создаем таблицы заново
+        # Создаем таблицы заново
         await conn.run_sync(Base.metadata.create_all)
 
     yield
+
 
 app = FastAPI(lifespan=lifespan)
 

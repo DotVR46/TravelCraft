@@ -1,21 +1,11 @@
-from sqlalchemy import Column, String, Float, Integer, ForeignKey, DateTime, Table
-from sqlalchemy.orm import relationship
+from typing import Optional
+
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, DateTime, Table, func
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 import datetime
 
 from app.core.base import Base
 
-
-# Определяем модель Tag
-class Tag(Base):
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, nullable=False)
-
-    # Связь с Place через place_tags
-    places = relationship("Place", secondary="place_tags", back_populates="tags")
-
-
-# Таблица для связи Place и Tag
 place_tags = Table(
     "place_tags",
     Base.metadata,
@@ -24,24 +14,45 @@ place_tags = Table(
 )
 
 
-class Place(Base):
+# Определяем модель Tag
+class Tag(Base):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    latitude = Column(Float, nullable=False)
-    longitude = Column(Float, nullable=False)
-    address = Column(String, nullable=True)
-    rating = Column(Float, default=0)
-    likes = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(
-        DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.utcnow
+    # Связь с местами
+    places: Mapped[list["Place"]] = relationship(
+        "Place", secondary=place_tags, back_populates="tags"
+    )
+
+    def __repr__(self):
+        return f"<Tag(name={self.name})>"
+
+
+# Таблица для связи Place и Tag
+
+
+class Place(Base):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    latitude: Mapped[float] = mapped_column(Float, nullable=False)
+    longitude: Mapped[float] = mapped_column(Float, nullable=False)
+    address: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    rating: Mapped[float] = mapped_column(Float, default=0)
+    likes: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=False), default=datetime.datetime.now
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=False),
+        default=datetime.datetime.now,
+        onupdate=datetime.datetime.now,
     )
 
     # Связи
-    tags = relationship("Tag", secondary=place_tags, back_populates="places")
-    # creator_id = Column(Integer, ForeignKey("users.id"))
+    tags: Mapped[list["Tag"]] = relationship(
+        "Tag", secondary=place_tags, back_populates="places"
+    )
 
     def __repr__(self):
         return f"<Place(name={self.name}, rating={self.rating})>"
