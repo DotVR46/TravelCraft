@@ -32,3 +32,10 @@ async def update_place(
         setattr(place, name, value)
     await session.commit()
     return place
+
+
+async def delete_place(session: AsyncSession, place_id: int) -> Place | None:
+    place = await session.get(Place, place_id)
+    await session.delete(place)
+    await session.commit()
+    return place

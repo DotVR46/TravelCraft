@@ -54,3 +54,14 @@ async def update_place(
     return await crud.update_place(
         session=session, place_id=place_id, place_in=place_in
     )
+
+
+@router.delete(
+    "/{place_id}",
+    description="Удалить место по id.",
+)
+async def delete_place(
+    place_id: int,
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    return await crud.delete_place(session=session, place_id=place_id)
