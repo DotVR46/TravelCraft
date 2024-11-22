@@ -24,7 +24,7 @@ class PlaceUpdate(BaseModel):
     address: Optional[str]
 
 
-class PlaceResponse(PlaceBase):
+class Place(PlaceBase):
     id: int
     rating: float
     likes: int

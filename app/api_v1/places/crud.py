@@ -2,7 +2,7 @@ from sqlalchemy import select, Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.place import Place
-from app.schemas.place import PlaceCreate
+from app.schemas.place import PlaceCreate, PlaceUpdate
 
 
 async def get_place(session: AsyncSession) -> list[Place]:
@@ -21,4 +21,14 @@ async def create_place(session: AsyncSession, place_in: PlaceCreate) -> Place:
     session.add(place)
     await session.commit()
     # await session.refresh(place)
+    return place
+
+
+async def update_place(
+    session: AsyncSession, place_id: int, place_in: PlaceUpdate, partial: bool = False
+) -> Place | None:
+    place = await session.get(Place, place_id)
+    for name, value in place_in.model_dump(exclude_unset=partial).items():
+        setattr(place, name, value)
+    await session.commit()
     return place

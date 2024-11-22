@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
 
     async with db_helper.engine.begin() as conn:
         # Удаляем все таблицы
-        await conn.run_sync(Base.metadata.drop_all)
+        # await conn.run_sync(Base.metadata.drop_all)
         # Создаем таблицы заново
         await conn.run_sync(Base.metadata.create_all)
 
@@ -26,4 +26,4 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(places_router, prefix="/api_v1/v1")
+app.include_router(places_router, prefix="/api_v1")
