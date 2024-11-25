@@ -4,7 +4,14 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 
-class TagResponse(BaseModel):
+class TagCreate(BaseModel):
+    name: str
+
+    class Config:
+        from_attributes = True
+
+
+class TagResponse(TagCreate):
     id: int
     name: str
 
@@ -21,7 +28,7 @@ class PlaceBase(BaseModel):
 
 
 class PlaceCreate(PlaceBase):
-    pass
+    tags: Optional[List[TagCreate]]
 
 
 class PlaceUpdate(BaseModel):

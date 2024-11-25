@@ -1,8 +1,9 @@
 from sqlalchemy import select, Result
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.models.place import Place
+from app.models.place import Place, Tag
 from app.schemas.place import PlaceCreate, PlaceUpdate
 
 
@@ -28,10 +29,35 @@ async def get_place(session: AsyncSession, place_id: int) -> Place | None:
 
 
 async def create_place(session: AsyncSession, place_in: PlaceCreate) -> Place:
-    place = Place(**place_in.model_dump())
+    # Создаем место из переданных данных
+    place = Place(**place_in.model_dump(exclude={"tags"}))
+
+    # Обрабатываем теги
+    tags = []
+    for tag_in in place_in.tags:  # Массив тегов из запроса
+        # Проверяем, существует ли тег
+        existing_tag = await session.execute(
+            select(Tag).filter(Tag.name == tag_in.name)
+        )
+        existing_tag = existing_tag.scalar_one_or_none()
+
+        if existing_tag:  # Если тег существует, добавляем его
+            tags.append(existing_tag)
+        else:  # Если тег не существует, создаем новый и добавляем его
+            new_tag = Tag(name=tag_in.name)
+            session.add(new_tag)
+            tags.append(new_tag)
+
+    # Привязываем теги к месту
+    place.tags = tags
+
+    # Добавляем место в базу данных
     session.add(place)
     await session.commit()
+
+    # Не забываем обновить объект после коммита, чтобы получить id
     # await session.refresh(place)
+
     return place
 
 
