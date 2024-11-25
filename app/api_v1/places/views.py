@@ -12,7 +12,7 @@ router = APIRouter(tags=["Places"], prefix="/places")
 async def get_places(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-    return await crud.get_place(session=session)
+    return await crud.get_places(session=session)
 
 
 @router.get("/{place_id}", response_model=Place, description="Получить место по id.")
@@ -20,10 +20,10 @@ async def get_place(
     place_id: int,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-    product = await crud.get_places(session=session, place_id=place_id)
+    product = await crud.get_place(session=session, place_id=place_id)
     if product is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Место не найдено"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Место не найдено."
         )
     return product
 

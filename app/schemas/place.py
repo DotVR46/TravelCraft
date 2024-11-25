@@ -1,7 +1,15 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
+
+
+class TagResponse(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
 
 
 class PlaceBase(BaseModel):
@@ -30,6 +38,7 @@ class Place(PlaceBase):
     likes: int
     created_at: datetime
     updated_at: datetime
+    tags: List[TagResponse]
 
     class Config:
         from_attributes = True
