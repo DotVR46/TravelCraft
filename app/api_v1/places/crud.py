@@ -1,5 +1,4 @@
 from sqlalchemy import select, Result
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
