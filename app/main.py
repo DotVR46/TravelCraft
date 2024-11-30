@@ -8,7 +8,8 @@ from app.api_v1.users.user_manager import (
     auth_backend,
     current_active_user,
     UserManager,
-    get_user_manager, fastapi_users,
+    get_user_manager,
+    fastapi_users,
 )
 from app.core.base import Base
 from app.db.db_helper import db_helper
@@ -32,10 +33,22 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="TravelCraft",
+    description="Сервис для путешественников",
+    version="0.0.1",
+    contact={
+        "name": "DotVR46",
+        "url": "https://github.com/DotVR46/TravelCraft",
+        "email": "maggot8950@gmail.com",
+    }
+)
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/api_v1/auth/jwt", tags=["auth"]
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/api_v1/auth/jwt",
+    tags=["auth"],
 )
 
 app.include_router(

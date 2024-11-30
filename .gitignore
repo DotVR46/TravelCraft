@@ -3,3 +3,5 @@
 */__pycache__/
 */*/__pycache__/
 .env
+app/api_v1/places/__pycache__/
+app/api_v1/users/__pycache__/
