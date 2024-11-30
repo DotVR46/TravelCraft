@@ -2,11 +2,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Depends
 
-from fastapi_users.authentication import Authenticator
-from fastapi_users.models import UP, ID
-from sqlalchemy.exc import SQLAlchemyError
-
 from app.api_v1.places.views import router as places_router
+from app.api_v1.users.views import router as users_router
 from app.api_v1.users.user_manager import (
     auth_backend,
     current_active_user,
@@ -38,29 +35,32 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
+    fastapi_users.get_auth_router(auth_backend), prefix="/api_v1/auth/jwt", tags=["auth"]
 )
 
 app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/auth",
+    prefix="/api_v1/auth",
     tags=["auth"],
 )
 app.include_router(
     fastapi_users.get_reset_password_router(),
-    prefix="/auth",
+    prefix="/api_v1/auth",
     tags=["auth"],
 )
 app.include_router(
     fastapi_users.get_verify_router(UserRead),
-    prefix="/auth",
+    prefix="/api_v1/auth",
     tags=["auth"],
 )
 app.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
-    prefix="/users",
+    prefix="/api_v1/users",
     tags=["users"],
 )
+
+app.include_router(places_router, prefix="/api_v1")
+app.include_router(users_router, prefix="/api_v1")
 
 
 @app.get("/authenticated-route")
