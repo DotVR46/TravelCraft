@@ -47,8 +47,8 @@ app = FastAPI(
     description="Сервис для путешественников",
     version="0.0.1",
     contact={
-        "name": "DotVR46",
-        "url": "https://github.com/DotVR46/TravelCraft",
+        "name": "HardLine89",
+        "url": "https://github.com/HardLine89/TravelCraft",
         "email": "maggot8950@gmail.com",
     }
 )
