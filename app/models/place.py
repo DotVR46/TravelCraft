@@ -48,6 +48,9 @@ class Place(Base):
         default=datetime.datetime.now,
         onupdate=datetime.datetime.now,
     )
+    route_places: Mapped[list["RoutePlace"]] = relationship(
+        "RoutePlace", back_populates="place", cascade="all, delete-orphan"
+    )
 
     # Связи
     tags: Mapped[list["Tag"]] = relationship(

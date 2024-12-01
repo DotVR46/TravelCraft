@@ -19,16 +19,24 @@ from app.schemas.user import UserRead, UserCreate, UserUpdate
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    from app.models.user import User
     from app.models.place import (
         Place,
         Tag,
-    )  # Импортируем все модели перед созданием таблиц
+    )
+    from app.models.route import (
+        Route,
+        RoutePlace,
+        RouteReview,
+    )
 
-    async with db_helper.engine.begin() as conn:
-        # Удаляем все таблицы
-        # await conn.run_sync(Base.metadata.drop_all)
-        # Создаем таблицы заново
-        await conn.run_sync(Base.metadata.create_all)
+    # Импортируем все модели перед созданием таблиц
+
+    # async with db_helper.engine.begin() as conn:
+    #     # Удаляем все таблицы
+    #     # await conn.run_sync(Base.metadata.drop_all)
+    #     # Создаем таблицы заново
+    #     await conn.run_sync(Base.metadata.create_all)
 
     yield
 
