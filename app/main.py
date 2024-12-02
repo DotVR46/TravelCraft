@@ -4,6 +4,7 @@ from fastapi import FastAPI, Depends
 
 from app.api_v1.places.views import router as places_router
 from app.api_v1.users.views import router as users_router
+from app.api_v1.routes.views import router as routers_router
 from app.api_v1.users.user_manager import (
     auth_backend,
     current_active_user,
@@ -82,6 +83,7 @@ app.include_router(
 
 app.include_router(places_router, prefix="/api_v1")
 app.include_router(users_router, prefix="/api_v1")
+app.include_router(routers_router, prefix="/api_v1")
 
 
 @app.get("/authenticated-route")
