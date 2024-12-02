@@ -13,6 +13,7 @@ class RouteBase(BaseModel):
 
 
 class RouteCreate(RouteBase):
+    author_id: int
     places: List[int]  # IDs мест, включенных в маршрут
 
 
@@ -44,6 +45,7 @@ class RouteReviewBase(BaseModel):
 
 class RouteReviewCreate(RouteReviewBase):
     route_id: int  # ID маршрута, к которому относится отзыв
+    author_id: int
 
 
 class RouteReviewDetail(RouteReviewBase):

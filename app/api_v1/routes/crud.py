@@ -30,11 +30,9 @@ async def get_route(session: AsyncSession, route_id: int) -> Route | None:
     return result.scalars().unique().one_or_none()
 
 
-async def create_route(
-    session: AsyncSession, route_in: RouteCreate, author_id: int
-) -> Route:
+async def create_route(session: AsyncSession, route_in: RouteCreate) -> Route:
     # Создаем маршрут
-    route = Route(**route_in.model_dump(exclude={"places"}), author_id=author_id)
+    route = Route(**route_in.model_dump(exclude={"places"}))
     session.add(route)
 
     # Привязываем места к маршруту
@@ -74,6 +72,12 @@ async def delete_route(session: AsyncSession, route_id: int) -> Type[Route] | No
 # CRUD для отзывов
 
 
+async def get_route_review(session: AsyncSession, review_id: int) -> Route | None:
+    stmt = select(RouteReview).where(RouteReview.id == review_id)
+    result = await session.execute(stmt)
+    return result.scalars().unique().one_or_none()
+
+
 async def get_route_reviews(session: AsyncSession, route_id: int) -> list[RouteReview]:
     stmt = (
         select(RouteReview)
@@ -86,9 +90,9 @@ async def get_route_reviews(session: AsyncSession, route_id: int) -> list[RouteR
 
 
 async def create_route_review(
-    session: AsyncSession, review_in: RouteReviewCreate, author_id: int
+    session: AsyncSession, review_in: RouteReviewCreate
 ) -> RouteReview:
-    review = RouteReview(**review_in.model_dump(), author_id=author_id)
+    review = RouteReview(**review_in.model_dump())
     session.add(review)
     await session.commit()
     # await session.refresh(review)
@@ -125,6 +129,7 @@ async def delete_route_review(
 
 
 # CRUD для привязки мест к маршрутам
+
 
 async def get_route_places(session: AsyncSession, route_id: int) -> list[RoutePlace]:
     stmt = (
