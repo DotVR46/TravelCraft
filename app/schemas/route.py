@@ -31,6 +31,17 @@ class RouteReviewBase(BaseModel):
     created_at: Optional[datetime] = None
 
 
+class RouteUpdate(RouteReviewBase):
+    title: Optional[str] = Field(None, max_length=255, description="Название маршрута")
+    description: Optional[str] = Field(None, description="Описание маршрута")
+    places: Optional[list[int]] = Field(
+        None, description="Список ID мест, которые входят в маршрут"
+    )
+
+    class Config:
+        from_attributes = True
+
+
 class RouteReviewCreate(RouteReviewBase):
     route_id: int  # ID маршрута, к которому относится отзыв
 
