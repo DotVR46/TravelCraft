@@ -25,13 +25,7 @@ class RouteDetail(RouteBase):
         from_attributes = True
 
 
-class RouteReviewBase(BaseModel):
-    text: str
-    rating: int = Field(..., ge=1, le=5)  # Рейтинг от 1 до 5
-    created_at: Optional[datetime] = None
-
-
-class RouteUpdate(RouteReviewBase):
+class RouteUpdate(RouteBase):
     title: Optional[str] = Field(None, max_length=255, description="Название маршрута")
     description: Optional[str] = Field(None, description="Описание маршрута")
     places: Optional[list[int]] = Field(
@@ -42,6 +36,12 @@ class RouteUpdate(RouteReviewBase):
         from_attributes = True
 
 
+class RouteReviewBase(BaseModel):
+    text: str
+    rating: int = Field(..., ge=1, le=5)  # Рейтинг от 1 до 5
+    created_at: Optional[datetime] = None
+
+
 class RouteReviewCreate(RouteReviewBase):
     route_id: int  # ID маршрута, к которому относится отзыв
 
@@ -50,6 +50,16 @@ class RouteReviewDetail(RouteReviewBase):
     id: int
     author_id: int  # ID автора отзыва
     route_id: int  # ID маршрута
+
+    class Config:
+        from_attributes = True
+
+
+class RouteReviewUpdate(RouteReviewBase):
+    rating: Optional[float] = Field(
+        None, ge=0, le=5, description="Оценка маршрута от 0 до 5"
+    )
+    content: Optional[str] = Field(None, description="Текстовый отзыв о маршруте")
 
     class Config:
         from_attributes = True
