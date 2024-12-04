@@ -78,10 +78,9 @@ async def get_route_review(session: AsyncSession, review_id: int) -> Route | Non
     return result.scalars().unique().one_or_none()
 
 
-async def get_route_reviews(session: AsyncSession, route_id: int) -> list[RouteReview]:
+async def get_route_reviews(session: AsyncSession) -> list[RouteReview]:
     stmt = (
         select(RouteReview)
-        .where(RouteReview.route_id == route_id)
         .order_by(RouteReview.id)
     )
     result = await session.execute(stmt)
