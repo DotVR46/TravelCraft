@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 
 class TagCreate(BaseModel):
@@ -25,6 +25,7 @@ class PlaceBase(BaseModel):
     latitude: float
     longitude: float
     address: Optional[str]
+    photo: HttpUrl | None
 
 
 class PlaceCreate(PlaceBase):
@@ -46,6 +47,7 @@ class Place(PlaceBase):
     created_at: datetime
     updated_at: datetime
     tags: List[TagResponse]
+    photo: HttpUrl | None
 
     class Config:
         from_attributes = True

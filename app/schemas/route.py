@@ -1,6 +1,6 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 from app.schemas.place import Place
 
@@ -10,6 +10,7 @@ class RouteBase(BaseModel):
     description: Optional[str]
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+    photo: HttpUrl | None
 
 
 class RouteCreate(RouteBase):

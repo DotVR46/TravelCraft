@@ -10,6 +10,8 @@ HOST = os.getenv("DB_HOST")
 NAME = os.getenv("DB_NAME")
 
 BASE_DIR = Path(__file__).parent.parent
+MEDIA_DIR = os.path.join(os.path.dirname(__file__), "media")
+os.makedirs(MEDIA_DIR, exist_ok=True)
 
 
 class Setting(BaseSettings):

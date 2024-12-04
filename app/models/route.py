@@ -26,6 +26,7 @@ class Route(Base):
     status: Mapped[RouteStatus] = mapped_column(
         Enum(RouteStatus), default=RouteStatus.PLANNED, nullable=False
     )  # Статус маршрута
+    photo: Mapped[str | None] = mapped_column(nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=False), default=datetime.datetime.now
     )

@@ -40,6 +40,7 @@ class Place(Base):
     address: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     rating: Mapped[float] = mapped_column(Float, default=0)
     likes: Mapped[int] = mapped_column(Integer, default=0)
+    photo: Mapped[str | None] = mapped_column(nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=False), default=datetime.datetime.now
     )
